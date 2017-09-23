@@ -3,6 +3,7 @@ const expressGraphQL = require('express-graphql'); //by convention, has to be ty
 
 app.use('/graphql', expressGraphQL({
   graphiql: true, //only for dev environment
+  
 
 }));
 
