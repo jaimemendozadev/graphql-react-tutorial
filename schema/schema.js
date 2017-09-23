@@ -12,4 +12,17 @@ const UserType = new GrqphQLObjectType({
     firstName: {type: GrqphQLString},
     age: {type: GrqphQLInt}
   }
+});
+
+const RootQuery = new GraphQLObjectType({
+  name: 'RootQueryType',
+  fields: {
+    user: {
+      type:UserType,
+      args: {id: {type: GraphQLString}},
+      resolve(parentValue, args) {
+              
+      }
+    }
+  }
 })
