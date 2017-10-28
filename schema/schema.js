@@ -1,17 +1,17 @@
-const grqphql = require('grqphql');
+const graphql = require('graphql');
 const {
-  GrqphQLObjectType,
-  GrqphQLString,
-  GrqphQLInt,
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLInt,
   GraphQLSchema  
-} = grqphql;
+} = graphql;
 
-const UserType = new GrqphQLObjectType({
+const UserType = new GraphQLObjectType({
   name: 'User', //describes type we're defining
   fields: {
-    id: {type: GrqphQLString},
-    firstName: {type: GrqphQLString},
-    age: {type: GrqphQLInt}
+    id: {type: GraphQLString},
+    firstName: {type: GraphQLString},
+    age: {type: GraphQLInt}
   }
 });
 
