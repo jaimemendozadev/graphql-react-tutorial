@@ -2,7 +2,8 @@ const grqphql = require('grqphql');
 const {
   GrqphQLObjectType,
   GrqphQLString,
-  GrqphQLInt  
+  GrqphQLInt,
+  GraphQLSchema  
 } = grqphql;
 
 const UserType = new GrqphQLObjectType({
@@ -25,4 +26,8 @@ const RootQuery = new GraphQLObjectType({
       }
     }
   }
-})
+});
+
+module.exports = new GraphQLSchema({
+  query: RootQuery
+});
