@@ -1,10 +1,13 @@
 const graphql = require('graphql');
+const axios = require('axios');
 const {
   GraphQLObjectType,
   GraphQLString,
   GraphQLInt,
   GraphQLSchema  
 } = graphql;
+
+const usersURL = `http://localhost:3000/users`;
 
 const UserType = new GraphQLObjectType({
   name: 'User', //describes type we're defining
@@ -22,7 +25,10 @@ const RootQuery = new GraphQLObjectType({
       type:UserType,
       args: {id: {type: GraphQLString}},
       resolve(parentValue, args) {
-              
+        console.log(`${usersURL}/${args.id}`)
+        return axios.get(`${usersURL}/${args.id}`).then( response => {
+          return response.data;
+        });        
       }
     }
   }
