@@ -26,7 +26,14 @@ const UserType = new GraphQLObjectType({
     id: {type: GraphQLString},
     firstName: {type: GraphQLString},
     age: {type: GraphQLInt},
-    company: {type: CompanyType}  //treat associations bet. types as a field
+    company: {
+      type: CompanyType, //treat associations bet. types as a field
+      resolve(parentValue, args){
+        return axios.get(`${companiesURL}/${parentValue.companyId}`).then( response => {
+          return response.data;
+        });
+      }
+    }  
   }
 });
 
@@ -34,7 +41,7 @@ const RootQuery = new GraphQLObjectType({
   name: 'RootQueryType',
   fields: {
     user: {
-      type:UserType,
+      type: UserType,
       args: {id: {type: GraphQLString}},
       resolve(parentValue, args) {
         return axios.get(`${usersURL}/${args.id}`).then( response => {
