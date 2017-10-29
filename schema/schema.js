@@ -4,6 +4,7 @@ const {
   GraphQLObjectType,
   GraphQLString,
   GraphQLInt,
+  GraphQLList,
   GraphQLSchema  
 } = graphql;
 
@@ -12,17 +13,26 @@ const companiesURL = `http://localhost:3000/companies`;
 
 const CompanyType = new GraphQLObjectType({
   name: 'Company',
-  fields: {
+  //wrap fields obj with arrow function to avoid closure issue
+  fields: () => ({
     id: {type: GraphQLString},
     name: {type: GraphQLString},
-    description: {type: GraphQLString} 
-  }
+    description: {type: GraphQLString},
+    users: {
+      type: new GraphQLList(UserType),
+      resolve(parentValue, args){
+        return axios.get(`${companiesURL}/${parentValue.id}/users`).then( response => {
+          return response.data;
+        });
+      }
+    } 
+  })
 });
 
 
 const UserType = new GraphQLObjectType({
   name: 'User', //describes type we're defining
-  fields: {
+  fields: () => ({
     id: {type: GraphQLString},
     firstName: {type: GraphQLString},
     age: {type: GraphQLInt},
@@ -34,7 +44,7 @@ const UserType = new GraphQLObjectType({
         });
       }
     }  
-  }
+  })
 });
 
 const RootQuery = new GraphQLObjectType({
@@ -53,7 +63,7 @@ const RootQuery = new GraphQLObjectType({
       type: CompanyType,
       args: {id: {type: GraphQLString}},
       resolve(parentValue, args){
-        axios.get(`${companiesURL}/${args.id}}`).then(response => {
+        return axios.get(`${companiesURL}/${args.id}`).then(response => {
           return response.data;
         });
       }
