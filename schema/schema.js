@@ -80,9 +80,6 @@ const RootQuery = new GraphQLObjectType({
 - sometimes when you have a mutation, the collection of data you're operating on and the type that you return might not always be the same
 */
 
-// const usersURL = `http://localhost:3000/users`;
-// const companiesURL = `http://localhost:3000/companies`;
-
 const mutation = new GraphQLObjectType({
   name: 'Mutation',
   fields: {
@@ -104,6 +101,20 @@ const mutation = new GraphQLObjectType({
       args: {id: {type: new GraphQLNonNull(GraphQLString)}},
       resolve(parentValue, {id}){
         return axios.delete(`${usersURL}/${id}`).then(response => {
+          return response.data;
+        });
+      }
+    },
+    editUser: {
+      type: UserType,
+      args: {
+        id: {type: new GraphQLNonNull(GraphQLString)},
+        firstName: {type: GraphQLString},
+        age: {type: GraphQLInt},
+        companyId: {type: GraphQLString}
+      },
+      resolve(parentValue, args){
+        return axios.patch(`${usersURL}/${args.id}`, args).then(response => {
           return response.data;
         });
       }
