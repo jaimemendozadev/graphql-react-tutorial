@@ -5,6 +5,7 @@ const {
   GraphQLString,
   GraphQLInt,
   GraphQLList,
+  GraphQLNonNull,
   GraphQLSchema  
 } = graphql;
 
@@ -71,6 +72,38 @@ const RootQuery = new GraphQLObjectType({
   }
 });
 
+/*
+- mutation fields describe the operation the mutation will undertake
+
+- type field refers to type of data you'll return from resolve function.
+
+- sometimes when you have a mutation, the collection of data you're operating on and the type that you return might not always be the same
+*/
+
+// const usersURL = `http://localhost:3000/users`;
+// const companiesURL = `http://localhost:3000/companies`;
+
+const mutation = new GraphQLObjectType({
+  name: 'Mutation',
+  fields: {
+    addUser: {
+      type: UserType,
+      args: {
+        firstName: {type: new GraphQLNonNull(GraphQLString)},
+        age: {type: new GraphQLNonNull(GraphQLInt)},
+        companyId: {type: GraphQLString}
+      },
+      resolve(parentValue, {firstName, age}){
+        return axios.post(`${usersURL}`, {firstName, age}).then(response => {
+          return response.data;
+        });
+      }
+    }
+  }
+});
+
+
 module.exports = new GraphQLSchema({
-  query: RootQuery
+  query: RootQuery,
+  mutation
 });
